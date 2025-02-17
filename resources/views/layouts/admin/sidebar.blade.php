@@ -89,7 +89,26 @@
                 </li>
             </ul>
         </li>
-
+        <li class="treeview">
+            <a href="#">
+              <i data-feather="products"></i>
+              <span>{{ __('products.all_products') }}</span>
+            </a>
+              <ul class="treeview-menu">
+                  {{-- <li>
+                      <a href="{{ route('admin.products.index') }}">
+                          <i class="fa fa-cogs" ></i>
+                          <span>{{ __('system.nav_products') }}</span>
+                      </a>
+                  </li> --}}
+                  <li>
+                      <a href="{{ route('admin.products_categories.index') }}">
+                          <i class="fa fa-cogs"></i>
+                          <span>{{ __('system.nav_products_categories') }}</span>
+                      </a>
+                  </li>
+              </ul>
+          </li>
         {{--wyloguj--}}
         <li>
           <a href="{{ route('admin.logout') }}">

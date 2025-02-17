@@ -25,7 +25,6 @@ class RoleController extends Controller
 
 public function handle($request, Closure $next)
 {
-    dd(auth()->user()->getPermissionsViaRoles());
     return $next($request);
 }
 

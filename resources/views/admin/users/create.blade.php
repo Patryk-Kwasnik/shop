@@ -24,31 +24,31 @@
         <form method="POST" action="{{ route('admin.users.store') }}">
             @csrf
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-6">
+                <div class="col-xs-12 col-sm-12 col-md-5">
                     <div class="form-group">
                         <strong>{{ __('users.name') }}:</strong>
                         <input type="text" name="name" placeholder="Name" class="form-control">
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-6">
+                <div class="col-xs-12 col-sm-12 col-md-5">
                     <div class="form-group">
                         <strong>{{ __('users.email') }}:</strong>
                         <input type="email" name="email" placeholder="Email" class="form-control">
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-6">
+                <div class="col-xs-12 col-sm-12 col-md-5">
                     <div class="form-group">
                         <strong>{{ __('users.password') }}:</strong>
                         <input type="password" name="password" placeholder="Password" class="form-control">
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-6">
+                <div class="col-xs-12 col-sm-12 col-md-5">
                     <div class="form-group">
                         <strong>{{ __('users.confirm_password') }}:</strong>
                         <input type="password" name="confirm-password" placeholder="Confirm Password" class="form-control">
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-6">
+                <div class="col-xs-12 col-sm-12 col-md-5">
                     <div class="form-group">
                         <strong>{{ __('users.roles') }}:</strong>
                         <select name="roles[]" class="form-control" multiple="multiple">

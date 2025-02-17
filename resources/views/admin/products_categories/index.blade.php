@@ -35,11 +35,7 @@
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
-                                                @if(!empty($user->getRoleNames()))
-                                                    @foreach($user->getRoleNames() as $v)
-                                                        <span class="badge rounded-pill bg-dark">{{ $v }}</span>
-                                                    @endforeach
-                                                @endif
+
                                             </td>
                                             <td class="text-center">
                                                 <a href =" {{ route('admin.users.show', $user->id) }}" title="{{ __('system.preview') }}" class= "btn btn-info"> <i class="fa fa-eye"></i></a>
@@ -61,5 +57,4 @@
             </div>
         </section>
     </div>
-    {!! $data->render() !!}
 @endsection

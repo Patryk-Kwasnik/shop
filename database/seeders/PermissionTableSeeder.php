@@ -22,18 +22,18 @@ class PermissionTableSeeder extends Seeder
             'role-create',
             'role-edit',
             'role-delete',
-            'news-list',
-            'news-create',
-            'news-edit',
-            'news-delete',
-            'tasks-list',
-            'tasks-create',
-            'tasks-edit',
-            'tasks-delete'
+            'products-list',
+            'products-create',
+            'products-edit',
+            'products-delete',
+            'products-categories-list',
+            'products-categories-create',
+            'products-categories-edit',
+            'products-categories-delete'
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::create(['name' => $permission, 'guard_name'=>'admin']);
         }
     }
 }

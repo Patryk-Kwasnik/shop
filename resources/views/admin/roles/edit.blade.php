@@ -39,7 +39,7 @@
                         @foreach($permission as $value)
                             <fieldset>
                                 <input type="checkbox" id="permission_{{$value->id}}" class="name" name="permission[]" 
-                                    value="{{$value->id}}" {{in_array($value->id, $rolePermissions) ? "checked" : false}} >
+                                    value="{{$value->name}}" {{in_array($value->id, $rolePermissions) ? "checked" : false}} >
                                 <label for="permission_{{$value->id}}">  {{ __("permissions.$value->name") }}</label>
                             </fieldset>
                         @endforeach
