@@ -11,40 +11,32 @@
                 </div>
             </div>
         </div>
-        @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-        {!! Form::open(array('route' => 'roles.store','method'=>'POST')) !!}
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-6">
-                <div class="form-group">
-                    <strong>{{ __('roles.name') }}:</strong>
-                    {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
+        <x-alert-error :errors="$errors" />
+        <form method="POST" action="{{ route('admin.roles.store') }}">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6">
+                    <div class="form-group">
+                        <strong>{{ __('roles.name') }}:</strong>
+                        <input type="text" name="name" placeholder="Name" class="form-control" value="{{ old('name') }}">
+                        <x-input-error field="name" />
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <strong>{{ __('roles.permission') }}:</strong>
+                        <br/>
+                        @foreach($permission as $value)
+                            <fieldset>
+                                <input type="checkbox" id="permission_{{$value->id}}" class="name" name="permission[]" value={{$value->id}} >
+                                <label for="permission_{{$value->id}}"> {{ $value->name }}</label>
+                            </fieldset>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 pull-left">
+                    <button type="submit" class="btn btn-primary">{{ __('system.save') }}</button>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>{{ __('roles.permission') }}:</strong>
-                    <br/>
-                    @foreach($permission as $value)
-                        <fieldset>
-                            <input type="checkbox" id="permission_{{$value->id}}" class="name" name="permission[]" value={{$value->id}} >
-                            <label for="permission_{{$value->id}}"> {{ $value->name }}</label>
-                        </fieldset>
-                    @endforeach
-                </div>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 pull-left">
-                <button type="submit" class="btn btn-primary">{{ __('system.save') }}</button>
-            </div>
-        </div>
-        {!! Form::close() !!}
+        </form>
     </div>
 @endsection

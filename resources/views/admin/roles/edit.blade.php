@@ -11,16 +11,7 @@
                 </div>
             </div>
         </div>
-        @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        <x-alert-error :errors="$errors" />
         <form method="POST" action="{{ route('admin.roles.update', $role->id) }}">
             @csrf
             @method('PUT')
@@ -28,13 +19,12 @@
                 <div class="col-xs-12 col-sm-12 col-md-6">
                     <div class="form-group">
                         <strong>{{ __('roles.name') }}:</strong>
-                        <input type="text" name="name" placeholder="Name" class="form-control" value="{{ $role->name }}">
+                        <input type="text" name="name" placeholder="Name" class="form-control" value="{{ old('name', $role->name) }}">
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-12">
                     <div class="form-group">
                         <strong>{{ __('roles.permission') }}:</strong>
-
                         <br/>
                         @foreach($permission as $value)
                             <fieldset>

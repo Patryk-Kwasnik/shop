@@ -1,6 +1,7 @@
-@props(['for'])
-@if (isset($for))
-    @error($for)
-        <p {{ $attributes->merge(['class' => 'text-sm text-red-600']) }}>{{ $message }}</p>
-    @enderror
+@if ($errors->has($field))
+    <div class="text-danger">
+        @foreach ($errors->get($field) as $message)
+            <p>{{ $message }}</p>
+        @endforeach
+    </div>
 @endif
