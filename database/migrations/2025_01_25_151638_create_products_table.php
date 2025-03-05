@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('hot_deals')->nullable();
             $table->integer('status')->default(0);
             $table->timestamps();
-            $table->foreign('category_id')->references('id')->on('products_categories')->onDelete('set null');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
         });
     }
 

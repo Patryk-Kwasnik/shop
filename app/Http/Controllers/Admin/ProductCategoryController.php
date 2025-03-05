@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\ProductCategory;
+use App\Http\Requests\Admin\CategoryRequest;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
-use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use App\Repositories\ProductCategoryRepository;
 use DB;
@@ -32,7 +33,7 @@ class ProductCategoryController extends Controller
     {
         $data = $this->categoryRepository->getAll();
 
-        return view('admin.products_categories.index', compact('data'));
+        return view('admin.categories.index', compact('data'));
     }
     /**
      * Show the form for creating a new resource.
@@ -41,7 +42,8 @@ class ProductCategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.products_categories.create');
+        $categories = $this->categoryRepository->getParentCategories();
+        return view('admin.categories.create', compact('categories'));
     }
     /**
      * Store a newly created resource in storage.
@@ -49,14 +51,10 @@ class ProductCategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required'
-        ]);
-        NewsCategory::create($request->all());
-        return redirect()->route('newsCategory.index')
-            ->with('success',__('system.success_save_mess'));
+        $this->categoryRepository->create($request->validated());
+        return redirect()->route('admin.categories.index')->with('success', 'Category created successfully.');
     }
     /**
      * Display the specified resource.
@@ -76,7 +74,9 @@ class ProductCategoryController extends Controller
      */
     public function edit($id)
     {
-       
+        $category = $this->categoryRepository->findById($id);
+        $categories = $this->categoryRepository->getParentCategories($id);
+        return view('admin.categories.edit', compact('category', 'categories'));
     }
     /**
      * Update the specified resource in storage.
@@ -85,14 +85,10 @@ class ProductCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required'
-        ]);
-        $category = NewsCategory::find($id);
-        $category->update($request->all());
-        return redirect()->route('newsCategory.index')->with('success',__('system.success_update_mes'));
+        $this->categoryRepository->update($id, $request->validated());
+        return redirect()->route('admin.categories.index')->with('success', 'Category updated successfully.');
     }
     /**
      * Remove the specified resource from storage.
@@ -102,11 +98,7 @@ class ProductCategoryController extends Controller
      */
     public function destroy($id)
     {
-        DB::table("news_categories")->where('id',$id)->delete();
-        $notification = array(
-            'message' => __('system.success_del_mess'),
-            'alert-type' => 'info'
-        );
-        return redirect()->route('newsCategory.index')->with($notification);
+        $this->categoryRepository->delete($id);
+        return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
 }

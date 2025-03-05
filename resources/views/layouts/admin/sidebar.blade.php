@@ -102,9 +102,9 @@
                       </a>
                   </li> --}}
                   <li>
-                      <a href="{{ route('admin.products_categories.index') }}">
+                      <a href="{{ route('admin.categories.index') }}">
                           <i class="fa fa-cogs"></i>
-                          <span>{{ __('system.nav_products_categories') }}</span>
+                          <span>{{ __('system.nav_categories') }}</span>
                       </a>
                   </li>
               </ul>

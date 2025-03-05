@@ -25,5 +25,5 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
-    Route::resource('products_categories', ProductCategoryController::class);
+    Route::resource('categories', ProductCategoryController::class);
 });
