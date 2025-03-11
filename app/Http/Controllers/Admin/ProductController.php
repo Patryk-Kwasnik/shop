@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Http\Requests\Admin\ProductRequest;
 use DB;
 
 class ProductController extends Controller
@@ -40,8 +41,7 @@ class ProductController extends Controller
     {
         $products = $this->productRepository->getAll();
     
-        return view('admin.products.index',compact('products'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('admin.products.index', compact('products'));
     }
 
     /**
@@ -51,7 +51,8 @@ class ProductController extends Controller
      */
     public function create()
     {     
-        return view('admin.products.create');
+        $categories = $this->categoryRepository->getParentCategories();
+        return view('admin.products.create', compact('categories'));
     }
 
     /**
@@ -60,13 +61,9 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|unique:products,name',
-            'permission' => 'required',
-        ]);
-
+        $this->categoryRepository->create($request->validated());
         return redirect()->route('admin.products.index')
             ->with('success','Role created successfully');
     }
@@ -83,7 +80,7 @@ class ProductController extends Controller
             ->where("product_has_permissions.product_id",$id)
             ->get();
 
-        return view('admin.products.show',compact('product','productPermissions'));
+        return view('admin.products.show', compact('product','productPermissions'));
     }
 
     /**
@@ -101,7 +98,7 @@ class ProductController extends Controller
             ->pluck('product_has_permissions.permission_id','product_has_permissions.permission_id')
             ->all();
 
-        return view('admin.products.edit',compact('product','permission','productPermissions'));
+        return view('admin.products.edit', compact('product','permission','productPermissions'));
     }
 
     /**

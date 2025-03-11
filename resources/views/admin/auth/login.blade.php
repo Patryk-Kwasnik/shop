@@ -106,7 +106,7 @@
         </div>
       </div>
       <div class="copyright pl-0">
-        <p class="text-center">&copy; 2025 Copyright Reej
+        <p class="text-center">&copy; 2025 Copyright Reeji
           
         </p>
       </div>
