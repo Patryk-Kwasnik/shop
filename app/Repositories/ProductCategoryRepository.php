@@ -13,17 +13,17 @@ class ProductCategoryRepository
 {
     public function getAll()
     {
-        return DB::table('categories')->get();
+        return ProductCategory::get();
     }
 
     public function getParentCategories($excludeId = null)
     {
         $query = ProductCategory::whereNull('parent_id');
-        
+
         if ($excludeId) {
             $query->where('id', '!=', $excludeId);
         }
-        
+
         return $query->orderBy('name')->get();
     }
 
@@ -41,11 +41,11 @@ class ProductCategoryRepository
     public function update($id, array $data)
     {
         $category = $this->findById($id);
-        
+
         if (isset($data['parent_id'])) {
             $data['depth'] = $this->calculateDepth($data['parent_id']);
         }
-        
+
         $category->update($data);
         return $category;
     }
@@ -62,5 +62,10 @@ class ProductCategoryRepository
         }
         $parent = ProductCategory::find($parentId);
         return $parent ? $parent->depth + 1 : 0;
+    }
+
+    public function getCategoriesArray():Array
+    {
+        return ProductCategory::pluck('name', 'id')->toArray();
     }
 }

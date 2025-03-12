@@ -66,7 +66,7 @@
                         <x-input-error field="status" />
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="col-xs-12 col-sm-12 col-md-10">
                     <div class="form-group">
                         <strong>{{ __('products.description') }}:</strong>
                         <textarea name="description" class="form-control" placeholder="{{ __('products.description') }}">{{ old('description') }}</textarea>

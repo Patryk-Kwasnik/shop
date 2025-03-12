@@ -13,7 +13,7 @@
                         </div>
                         <div class="box-body">
                             <x-alert-success />
-                                <x-admin-table 
+                                <x-admin-table
                                 :config="[
                                     ['name' => 'name', 'label' => __('products.name')],
                                     ['name' => 'sku', 'label' => __('products.sku')],
@@ -21,7 +21,7 @@
                                     ['name' => 'status', 'label' => __('products.status')],
                                     ['name' => 'category_name', 'label' => __('products.category')],
                                     ['name' => 'options', 'label' => __('system.options'), 'isHtml'=> true]
-                                ]" 
+                                ]"
                                 :data="$data"
                                 optionsView="admin.products.options"
                             />
@@ -31,5 +31,4 @@
             </div>
         </section>
     </div>
-    {!! $data->render() !!}
 @endsection

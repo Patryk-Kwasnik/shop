@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\ProductCategory;
+use App\Repositories\ProductCategoryRepository;
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
@@ -11,7 +14,7 @@ use DB;
 
 class ProductController extends Controller
 {
-    protected $productRepository; 
+    protected $productRepository;
 
     /**
      * Display a listing of the resource.
@@ -20,11 +23,11 @@ class ProductController extends Controller
      */
     function __construct(ProductRepository $productRepository)
     {
-        $this->middleware('permission:product-list|product-create|product-edit|product-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:product-create', ['only' => ['create','store']]);
-        $this->middleware('permission:product-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:product-delete', ['only' => ['destroy']]);
-        $this->productRepository = $productRepository; 
+        $this->middleware('permission:products-list|products-create|products-edit|products-delete', ['only' => ['index','store']]);
+        $this->middleware('permission:products-create', ['only' => ['create','store']]);
+        $this->middleware('permission:products-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:products-delete', ['only' => ['destroy']]);
+        $this->productRepository = $productRepository;
     }
 
     public function handle($request, Closure $next)
@@ -39,9 +42,9 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = $this->productRepository->getAll();
-    
-        return view('admin.products.index', compact('products'));
+        $data = $this->productRepository->getAll();
+
+        return view('admin.products.index', compact('data'));
     }
 
     /**
@@ -50,8 +53,9 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {     
-        $categories = $this->categoryRepository->getParentCategories();
+    {
+        $categoriesRepo = new ProductCategoryRepository();
+        $categories = $categoriesRepo->getCategoriesArray();
         return view('admin.products.create', compact('categories'));
     }
 
@@ -63,7 +67,7 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $this->categoryRepository->create($request->validated());
+        $this->productRepository->create($request->validated());
         return redirect()->route('admin.products.index')
             ->with('success','Role created successfully');
     }
@@ -75,12 +79,9 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Role::find($id);
-        $productPermissions = Permission::join("product_has_permissions","product_has_permissions.permission_id","=","permissions.id")
-            ->where("product_has_permissions.product_id",$id)
-            ->get();
+        $product = $this->productRepository->findById($id);
 
-        return view('admin.products.show', compact('product','productPermissions'));
+        return view('admin.products.show', compact('product'));
     }
 
     /**
@@ -91,14 +92,11 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $product = Role::find($id);
-        $permission = Permission::get();
+        $categoriesRepo = new ProductCategoryRepository();
+        $categories = $categoriesRepo->getCategoriesArray();
+        $product = $this->productRepository->findById($id);
 
-        $productPermissions = DB::table("product_has_permissions")->where("product_has_permissions.product_id",$id)
-            ->pluck('product_has_permissions.permission_id','product_has_permissions.permission_id')
-            ->all();
-
-        return view('admin.products.edit', compact('product','permission','productPermissions'));
+        return view('admin.products.edit', compact('product','categories'));
     }
 
     /**
@@ -108,18 +106,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'permission' => 'required',
-        ]);
-
-        $product = Role::find($id);
-        $product->name = $request->input('name');
-        $product->save();
-
-        $product->syncPermissions($request->input('permission'));
+        $this->productRepository->update($id, $request->validated());
 
         return redirect()->route('admin.products.index')->with('success',__('system.success_update_mes'));
     }
@@ -131,7 +120,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        DB::table("products")->where('id',$id)->delete();
+        $this->productRepository->delete($id);
         return redirect()->route('admin.products.index')->with($notification);
     }
 }

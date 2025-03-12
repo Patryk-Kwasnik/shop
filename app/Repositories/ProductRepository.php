@@ -19,6 +19,32 @@ class ProductRepository
 
     public function getAll()
     {
-        return DB::table('products')->get();
+        return Product::query()
+            ->leftJoin('categories as c', 'c.id', '=', 'products.category_id')
+            ->select('products.*', 'c.name as category_name')
+            ->get();
+    }
+
+    public function findById($id)
+    {
+        return Product::findOrFail($id);
+    }
+    public function create(array $data)
+    {
+        return Product::create($data);
+    }
+
+    public function update($id, array $data)
+    {
+        $product = $this->findById($id);
+        $product->update($data);
+
+        return $product;
+    }
+    public function delete($id)
+    {
+        $product = $this->findById($id);
+        $product->delete();
+        return $product;
     }
 }
